@@ -1,5 +1,4 @@
 from bitarray import bitarray
-from Random import Random
 import random
 
 def cyclic_redundancy_check(filename: str, divisor: str, len_crc: int) -> int:
@@ -51,12 +50,6 @@ def decoder(message: int, divisor: str, crc:int) -> bool:
         return True
     else:
         return False
-
-        
-def aleatorio(len_data)-> int:
-    MT19937 = Random(9) 
-    var = MT19937.randint(0,len_data-10)
-    return var
 
 
 def burst_error(msg:bitarray, n:int, seed: int)->bitarray:
