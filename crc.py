@@ -52,7 +52,7 @@ def decoder(message: int, divisor: str, crc:int) -> bool:
         return False
 
 
-def burst_error(msg:bitarray, n:int, seed: int)->bitarray:
+def burst_error(msg:bitarray, n:int)->bitarray:
     start =random.randint(0,len(msg)-n)
     msg[start] ^= 1
     msg[start+n-1] ^= 1
@@ -63,40 +63,16 @@ def burst_error(msg:bitarray, n:int, seed: int)->bitarray:
     
 
 def validador():
-    detectadosP1=0
-    detectadosP2=0
-    detectadosP3=0
-
     crc=cyclic_redundancy_check('test.txt', '10111', 4)   
     message=make_binary_message('test.txt', '10111', 4)
 
-    for i in range (0,1000):
-        n=4
-        new=bitarray(message)
-        ErrorMesage=burst_error(new,n,4)#n , message
-        if (decoder(ErrorMesage,'10111',crc)==False):
-            detectadosP1= detectadosP1+1
-    print ("Errores detectados con n=4: ",str(detectadosP1*100/1000)+"%")
-    
-    
-    for i in range (0,1000):
-        n=5
-        new=bitarray(message)
-        ErrorMesage=burst_error(new,n,69)#n , message
-        if (decoder(ErrorMesage,'10111',crc)==False):
-            detectadosP2= detectadosP2+1
-    print ("Errores detectados con n=5: ",str(detectadosP2*100/1000)+"%")
-    
-
-    for i in range (0,1000):
-        n=6
-        new = bitarray(message)
-        ErrorMesage=burst_error(new,n,69)#n , message
-        if (decoder(ErrorMesage,'10111',crc)==False):
-            detectadosP3= detectadosP3+1
-    print ("Errores detectados con n=6: ",str(detectadosP3*100/1000)+"%")
-
+    for n in range(4,7):
+        ErrorDetected=0
+        for i in range (0,1000):
+            new = bitarray(message)
+            ErrorMesage=burst_error(new,n)#message, n
+            if (decoder(ErrorMesage,'10111',crc)==False):
+                ErrorDetected= ErrorDetected+1
+        print ("Errores detectados con n=", n,": ",str(ErrorDetected*100/1000)+"%")
 
 validador()
-
-
